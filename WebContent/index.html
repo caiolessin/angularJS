@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html ng-app="tarefas">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap-theme.min.css">
+<title>Tarefas</title>
+</head>
+<body>
+	<div ng-controller="TarefaController as controller">
+		<form name="meuFormulario" class="form-horizontal" ng-submit="controller.salvarTarefa(controller.tarefa)">
+			<div class="col-sm-6 col-sm-offset-3">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h2>Tarefa</h2>
+					</div>
+					<div class="panel-body">
+					<json data="meuFormulario"></json>
+						<div class="form-group"
+							ng-class="{'has-error': meuFormulario.resumo.$invalid && meuFormulario.resumo.$dirty, 
+									   'has-success': meuFormulario.resumo.$valid && meuFormulario.resumo.$dirty}">
+							<label class="control-label col-sm-3" for="resumo">Resumo</label>
+							<div class="col-sm-9">
+								<input id="resumo" name="resumo" class="form-control" ng-model="controller.tarefa.resumo" required ng-minlength="3" ng-maxlength="10">
+								<div ng-messages="meuFormulario.resumo.$error" class="help-block" ng-if="meuFormulario.resumo.$dirty">
+									<div ng-message="required">Campo resumo deve ser informado</div>
+									<div ng-message="minlength">Campo resumo deve conter no mínimo 3 caracteres</div>
+									<div ng-message="maxlength">Campo resumo deve conter no máximo 10 caracteres</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="descricao">Descrição</label>
+							<div class="col-sm-9">
+								<textarea id="descricao" name="descricao" class="form-control" ng-model="controller.tarefa.descricao" rows="6" required></textarea>
+							</div>
+						</div>
+						<div class="form-group"
+							ng-class="{'has-error': meuFormulario.prazo.$invalid && meuFormulario.prazo.$dirty, 
+									   'has-success': meuFormulario.prazo.$valid && meuFormulario.prazo.$dirty}">
+							<label class="control-label col-sm-3" for="prazo">Prazo</label>
+							<div class="col-sm-9">
+								<input id="prazo" name="prazo" class="form-control" date-format ng-model="controller.tarefa.prazo"
+									required ng-pattern="/^(0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/\d{4}$/">
+									
+								<div ng-messages="meuFormulario.prazo.$error" class="help-block" ng-if="meuFormulario.prazo.$dirty">
+									<div ng-message="required">Campo prazo deve ser informado</div>
+									<div ng-message="pattern">Campo prazo deve ser uma data válida no formato 00/00/0000</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="situacao">Situação</label>
+							<div class="col-sm-9">
+								<select id="situacao" name="situacao" class="form-control" ng-model="controller.tarefa.situacao" required>
+									<option value="">Selecione...</option>
+									<option value="Pendente">Pendente</option>
+									<option value="Concluído">Concluído</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="panel-footer text-right">
+						<button type="button" class="btn btn-primary" ng-disabled="meuFormulario.$invalid">Salvar</button>
+						<button type="button" class="btn btn-default" ng-click="controller.novaTarefa()">Cancelar</button>
+					</div>
+				</div>
+			</div>
+		</form>
+		
+		<div class="col-sm-4 col-sm-offset-8">
+			<div class="input-group">
+				<input class="form-control" ng-model="controller.pesquisa">
+				<div class="input-group-btn">
+					<button type="button" class="btn btn-default">Pesquisar</button>
+					<button type="button" class="btn btn-primary">Novo</button>
+				</div>
+			</div>
+		</div>
+		<div class="table-responsive col-sm-12">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Resumo</th>
+						<th>Descrição</th>
+						<th>Prazo</th>
+						<th>Situação</th>
+						<th>Opções</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="tarefa in controller.tarefas | filter:controller.pesquisa">
+						<td>{{tarefa.resumo | uppercase}}</td>
+						<td>{{tarefa.descricao | capitalize}}</td>
+						<td>{{tarefa.prazo}}</td>
+						<td>{{tarefa.situacao}}</td>
+						<td>
+							<button type="button" class="btn btn-warning">Editar</button>
+							<button type="button" class="btn btn-danger">Remover</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+	</div>
+	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="node_modules/angular/angular.min.js"></script>
+	<script type="text/javascript" src="node_modules/angular-messages/angular-messages.min.js"></script>
+	<!-- modulos -->
+	<script type="text/javascript" src="js/config/app.js"></script>
+	<!-- filters -->
+	<script type="text/javascript" src="js/filter/capitalize-filter.js"></script>
+	<!-- directives -->
+	<script type="text/javascript" src="js/directive/date-format.directive.js"></script>
+	<script type="text/javascript" src="js/directive/json.directive.js"></script>
+	<!-- controllers -->
+	<script type="text/javascript" src="js/tarefa/tarefa-controller.js"></script>
+</body>
+</html>
