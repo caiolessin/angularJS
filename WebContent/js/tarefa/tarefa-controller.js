@@ -1,8 +1,8 @@
 (function(){
 	'use strict';
 	angular.module("tarefas").controller("TarefaController", Controller);
-	Controller.$inject = ["$scope","lowercaseFilter"];
-	function Controller($scope,lc){
+	Controller.$inject = ["$scope","lowercaseFilter","TarefaFactory"];
+	function Controller($scope,lc, tarefaFactory){
 		
 		var self = this;
 		
@@ -22,9 +22,10 @@
 			$scope.meuFormulario.$setPristine();
 		};
 		function incluirTarefa(tarefa){
-			tarefa.id = new Date().getTime();
-			self.tarefas.push(tarefa);
-			self.novaTarefa();
+			tarefaFactory.save(tarefa).then(function(result){
+				self.tarefas.push(result.data);
+				self.novaTarefa();
+			});
 		}
 		function editarTarefa(tarefa){
 			var pos = -1;

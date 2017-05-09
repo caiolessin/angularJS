@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html ng-app="tarefas">
 <head>
 <meta charset="utf-8">
@@ -15,7 +14,7 @@
 						<h2>Tarefa</h2>
 					</div>
 					<div class="panel-body">
-					<json data="meuFormulario"></json>
+					<!-- <json data="meuFormulario"></json> -->
 						<div class="form-group"
 							ng-class="{'has-error': meuFormulario.resumo.$invalid && meuFormulario.resumo.$dirty, 
 									   'has-success': meuFormulario.resumo.$valid && meuFormulario.resumo.$dirty}">
@@ -61,7 +60,7 @@
 						</div>
 					</div>
 					<div class="panel-footer text-right">
-						<button type="button" class="btn btn-primary" ng-disabled="meuFormulario.$invalid">Salvar</button>
+						<button type="submit" class="btn btn-primary" ng-disabled="meuFormulario.$invalid">Salvar</button>
 						<button type="button" class="btn btn-default" ng-click="controller.novaTarefa()">Cancelar</button>
 					</div>
 				</div>
@@ -108,6 +107,9 @@
 	<script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="node_modules/angular/angular.min.js"></script>
 	<script type="text/javascript" src="node_modules/angular-messages/angular-messages.min.js"></script>
+	<script type="text/javascript" src="node_modules/angular-resource/angular-resource.min.js"></script>
+	<script type="text/javascript" src="node_modules/angular-animate/angular-animate.min.js"></script>
+	<script type="text/javascript" src="node_modules/angularjs-toaster/toaster.min.js"></script>
 	<!-- modulos -->
 	<script type="text/javascript" src="js/config/app.js"></script>
 	<!-- filters -->
@@ -117,5 +119,7 @@
 	<script type="text/javascript" src="js/directive/json.directive.js"></script>
 	<!-- controllers -->
 	<script type="text/javascript" src="js/tarefa/tarefa-controller.js"></script>
+	<!-- factories -->
+	<script type="text/javascript" src="js/factory/tarefa-factory.js"></script>
 </body>
 </html>
