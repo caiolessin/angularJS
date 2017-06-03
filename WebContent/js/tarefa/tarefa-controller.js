@@ -1,8 +1,9 @@
 (function(){
+	
 	'use strict';
 	angular.module("tarefas").controller("TarefaController", Controller);
-	Controller.$inject = ["$scope","lowercaseFilter","TarefaFactory"];
-	function Controller($scope,lc, tarefaFactory){
+	Controller.$inject = ["$scope","lowercaseFilter","TarefaFactory", "toaster"];
+	function Controller($scope,lc, tarefaFactory, toaster){
 		
 		var self = this;
 		
@@ -21,27 +22,50 @@
 			}
 			$scope.meuFormulario.$setPristine();
 		};
+		self.pesquisar = function(){
+			tarefaFactory.search(self.pesquisa).then(function(result){
+				self.tarefas = result.data || [];
+			});
+		}
 		function incluirTarefa(tarefa){
 			tarefaFactory.save(tarefa).then(function(result){
 				self.tarefas.push(result.data);
 				self.novaTarefa();
+				toaster.pop({
+					type: result.status,
+					title: "Aviso",
+					body: result.mensagem
+				});
 			});
 		}
 		function editarTarefa(tarefa){
-			var pos = -1;
-			angular.forEach(this.tarefas,function(item,index){
-				if(tarefa.id == item.id){
-					pos = index;
+			
+			tarefaFactory.update(tarefa.id, tarefa).then(function(result){				
+				var pos = -1;
+				angular.forEach(this.tarefas,function(item,index){
+					if(result.data.id == item.id){
+						pos = index;
+					}
+				});
+				if(pos > -1){
+					self.tarefas.splice(pos,1,result.data);
 				}
-			});
-			if(pos > -1){
-				self.tarefas.splice(pos,1,this.tarefa);
 				self.novaTarefa();
-			}
+				toaster.pop({
+					type: result.status,
+					title: "Aviso",
+					body: result.mensagem
+				});
+			});
 		}
-		
+		function init(){
+			self.pesquisar();
+		}
+		init();
 	}
 	self.selecionarTarefa = function(tarefa){
-		self.tarefa = angular.copy(tarefa);
+		tarefaFactory.getById(tarefa.id).then(function(result){
+			self.tarefa = result.data;
+		});
 	}
 })();
