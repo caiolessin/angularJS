@@ -39,10 +39,9 @@
 			});
 		}
 		function editarTarefa(tarefa){
-			
-			tarefaFactory.update(tarefa.id, tarefa).then(function(result){				
+			tarefaFactory.update(tarefa.id, tarefa).then(function(result){
 				var pos = -1;
-				angular.forEach(this.tarefas,function(item,index){
+				angular.forEach(self.tarefas, function(item,index){
 					if(result.data.id == item.id){
 						pos = index;
 					}
@@ -58,14 +57,32 @@
 				});
 			});
 		}
+		self.removerTarefa = function(tarefa){
+			tarefaFactory.remove(tarefa.id).then(function(result){
+				var pos = -1;	
+				angular.forEach(self.tarefas,function(item,index){
+					if(result.data.id == item.id){
+						pos = index;
+					}
+				});
+				if(pos > -1){
+					self.tarefas.splice(pos,1);
+				}
+				toaster.pop({
+					type: result.status,
+					title: "Aviso",
+					body: result.mensagem
+				});
+			});
+		}
+		self.selecionarTarefa = function(tarefa){
+			tarefaFactory.getById(tarefa.id).then(function(result){
+				self.tarefa = result.data;
+			});
+		}
 		function init(){
 			self.pesquisar();
 		}
 		init();
-	}
-	self.selecionarTarefa = function(tarefa){
-		tarefaFactory.getById(tarefa.id).then(function(result){
-			self.tarefa = result.data;
-		});
 	}
 })();

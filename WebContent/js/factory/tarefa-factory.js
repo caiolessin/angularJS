@@ -31,6 +31,9 @@
 		factory.update = function(id, tarefa){
 			return resource.update({ id: id}, tarefa).$promise;
 		}
+		factory.remove = function(id){
+			return resource.remove({ id: id}).$promise;
+		}
 		
 		return factory;
 	}
